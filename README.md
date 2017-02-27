@@ -7,3 +7,4 @@
 ###利用form，传入查询的参数，然后在通过require('child_process')来调用子进程
 ###将返回的stdout存入mongoose中，
 具体的文档，过几天再补上，太累了 ，休息一下。
+ ![image](https://github.com/inertiabeer/baidu-frontend/blob/master/%E7%BB%93%E6%9E%9C%E5%AE%9E%E4%BE%8B.png)
