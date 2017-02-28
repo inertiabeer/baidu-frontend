@@ -1,5 +1,7 @@
 var express = require('express');
 var path = require('path');
+var fs = require("fs");
+var request = require('request');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -8,12 +10,18 @@ var mongoose = require('mongoose');
 var dbURL = 'mongodb://localhost:27017/ife';
 var db = mongoose.connect(dbURL);
 var model = require('./model.js');
+var crypto = require('crypto');
+
+function md5(text) {
+	return crypto.createHash('md5').update(text).digest('hex');
+}
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-
+app.use(express.static(__dirname));
+app.use(express.static(__dirname + "/images"));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -35,13 +43,28 @@ app.post('/baidu', function(req, res) {
 
 	var child_process = require('child_process');
 	var exec = child_process.exec;
-	exec("phantomjs task2.js " + req.body.keyword + " ipad", function(err, stdout, stderr) {
+	exec("phantomjs task2.js " + req.body.keyword + " " + req.body.phone, function(err, stdout, stderr) {
 		if (err) {
 			console.log('child_process had some error' + err.code);
 			return;
 		}
 		console.log(stdout);
 		var obj = JSON.parse(stdout);
+		var imgUrls = new Array();
+		for (var i = 0; i < obj.dataList.length; i++) {
+			if (obj.dataList[i].img !== "") {
+				let url = obj.dataList[i].img;
+				imgUrls.push(url);
+			}
+
+		}
+		console.log(imgUrls);
+
+		for (let j = 0; j < imgUrls.length; j++) {
+			request(imgUrls[j]).pipe(fs.createWriteStream("public/images/" + md5(imgUrls[j]) + ".png"));
+		}
+
+
 		var newdata = new model({
 
 			device: obj.device,
@@ -57,12 +80,12 @@ app.post('/baidu', function(req, res) {
 				console.log(err);
 			else
 				console.log(data);
-		})
+		});
 
 
 
 	});
-	res.send("thank you");
+	res.render("suc");
 })
 
 

@@ -29,7 +29,7 @@ for (var m_phone in o_device) {
 
 
 var url = "http://www.baidu.com/s?wd=" + encodeURIComponent(keyword);
-page.settings.userAgent = useragent;
+page.settings.userAgent = useragent || " ";
 
 page.viewportSize = {
 	width: width,
@@ -45,10 +45,10 @@ page.open(url, function(s) {
 
 				return $(".result").map(function() {
 					return ({
-						title: $(this).find('.t').find("a").text(),
+						title: $(this).find('.t>a').text(),
 						info: $(this).find(".c-abstract").text(),
 						link: $(this).find(".t>a").attr('href'),
-						img: $(this).find('.general_image_pic img').attr('src') || ''
+						img: $(this).find('.c-img').attr('src') || ''
 
 					})
 				}).toArray();

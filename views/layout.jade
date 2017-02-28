@@ -3,5 +3,15 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='./jquery.js')
+    script.
+      $(document).ready(function(){
+      $('#submit').click(function(){
+      if($("#keyword").val()=="")
+      alert('请输入关键词再提交');
+      else{$('form').submit();}
+      })
+      })
+
   body
     block content
