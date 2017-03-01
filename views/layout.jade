@@ -4,14 +4,30 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='./jquery.js')
+    script(src='./json2html.js')
+    script(src='jquery.json2html.js')
     script.
-      $(document).ready(function(){
-      $('#submit').click(function(){
-      if($("#keyword").val()=="")
-      alert('请输入关键词再提交');
-      else{$('form').submit();}
+      $(document).ready(
+      function()
+      {
+      $('button').click(function(){
+      $.post('http://localhost:3000/baidu',
+      {keyword:$('#keyword').val(),
+      phone:$('#phone').val()
+      },
+      function(data,status)
+      {
+      var tranform=
+      {
+      "<>":"li","html":'img ${img} info ${info} link ${link} title ${title}'
+      };
+      $('#container').json2html(data,tranform);
+      
       })
       })
+      })
+
+
 
   body
     block content

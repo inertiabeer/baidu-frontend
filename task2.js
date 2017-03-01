@@ -57,7 +57,7 @@ page.open(url, function(s) {
 
 			});
 		var result = {
-			device: m_phone,
+			device: phone,
 			code: 1,
 			msg: "抓取成功",
 			word: keyword,

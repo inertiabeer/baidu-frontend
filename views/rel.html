@@ -3,21 +3,36 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
-	<script src='jquery.js'></script>
+	<script src='./jquery.js'></script>
+	<script src='./json2html.js'></script>
+	<script src='.jquery.json2html.js/'></script>
+	<script>
+		$(document).ready(
+			function()
+			{
+				$('button').click(function(){
+					$.post('http://localhost:3000/baidu',
+						{keyword:$('#keyword').val(),
+						phone:$('#phone').val()
+					},
+					function(data,status)
+					{
+						var tranform=
+						{
+							"<>":"h3","html":'device: ${device} code:${code} msg:${msg} word:${word} time:${time} '
+						}
+
+					})
+				})
+
+			})
+	</script>
 </head>
 <body>
-	<form action="http://localhost:3000/baidu" method="POST">
-	输入你要搜索的关键词<br>
-		<input type="text" name="keyword">
-		<select name="" id="">
-			<option value="iphone5">iphone5</option>
-			<option value="iphone6">iphone6</option>
-			<option value="ipad">ipad</option>
-		</select>
-		<input type="submit">
 
+<div id="container">
 
-
-	</form>
+</div>
 </body>
+
 </html>

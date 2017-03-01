@@ -65,6 +65,7 @@ app.post('/baidu', function(req, res) {
 		}
 
 
+
 		var newdata = new model({
 
 			device: obj.device,
@@ -78,14 +79,19 @@ app.post('/baidu', function(req, res) {
 		newdata.save(function(err, data) {
 			if (err)
 				console.log(err);
-			else
+			else {
 				console.log(data);
+				res.send(JSON.stringify(obj.dataList));
+
+			}
+
 		});
 
 
 
 	});
-	res.render("suc");
+
+
 })
 
 

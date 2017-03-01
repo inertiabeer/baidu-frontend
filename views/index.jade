@@ -1,13 +1,14 @@
 extends layout
 
 block content
-  form(action='http://localhost:3000/baidu', method='POST')
+  form
     | 输入你要搜索的关键词
     br
     input#keyword(type='text', name='keyword')
-    select(name='phone', id='')
+    select#phone(name='phone')
       option(value='iphone5') iphone5
       option(value='iphone6') iphone6
       option(value='ipad') ipad
       option(value='pc') pc
   button#submit 提交
+  div#container
