@@ -14,3 +14,4 @@
 目前进度是能将返回的结果做成li标签
 争取一会就学会转换为table标签
 基本上就结束这次任务了
+ ![image](https://github.com/inertiabeer/baidu-frontend/blob/master/%E4%BB%BB%E5%8A%A1%E5%9B%9B90%E8%BF%9B%E5%BA%A6.png)
