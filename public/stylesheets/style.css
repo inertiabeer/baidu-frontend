@@ -6,3 +6,13 @@ body {
 a {
   color: #00B7FF;
 }
+table
+{
+	table-layout: fixed;
+	width: 600px;
+}
+td {
+	word-wrap: break-word;
+	width: 150px;
+	overflow: hidden;
+}

@@ -21,8 +21,8 @@ var users = require('./routes/users');
 
 var app = express();
 app.use(express.static(__dirname));
-app.use(express.static(__dirname + "/images"));
-// view engine setup
+app.use(express.static(__dirname + '/public/images'))
+	// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -81,7 +81,7 @@ app.post('/baidu', function(req, res) {
 				console.log(err);
 			else {
 				console.log(data);
-				res.send(JSON.stringify(obj.dataList));
+				res.send(obj.dataList);
 
 			}
 

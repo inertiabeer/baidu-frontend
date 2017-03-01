@@ -6,6 +6,8 @@
 	<script src='./jquery.js'></script>
 	<script src='./json2html.js'></script>
 	<script src='.jquery.json2html.js/'></script>
+	<script src='md5.js'></script>
+
 	<script>
 		$(document).ready(
 			function()
@@ -19,9 +21,17 @@
 					{
 						var tranform=
 						{
-							"<>":"h3","html":'device: ${device} code:${code} msg:${msg} word:${word} time:${time} '
+							"<>":"li","html":'img ${img} info ${info} link ${link} title ${title}'
+						};
+						$('#container').
+						for(var i=0;i<data.length;i++)
+						{
+							if(data[i].img!=="")
+							{
+								let md5=hex_md5(data[i].img);
+								$('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+"png"+">");
+							}
 						}
-
 					})
 				})
 

@@ -6,6 +6,8 @@ html
     script(src='./jquery.js')
     script(src='./json2html.js')
     script(src='jquery.json2html.js')
+    script(src='jquery.columns.min.js')
+    script(src='md5.js')
     script.
       $(document).ready(
       function()
@@ -17,11 +19,22 @@ html
       },
       function(data,status)
       {
-      var tranform=
+      //- var tranform=
+      //- {
+      //- "<>":"li","html":'img ${img} info ${info} link ${link} title ${title}'
+      //- };
+      //- $('#container').json2html(data,tranform);
+
+      $("#container").columns({data:data});
+      for(var i=0;i<data.length;i++)
       {
-      "<>":"li","html":'img ${img} info ${info} link ${link} title ${title}'
-      };
-      $('#container').json2html(data,tranform);
+      if(data[i].img!=="")
+      {
+      let md5=hex_md5(data[i].img);
+      $('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+".png"+">");
+      }
+      }
+
       
       })
       })
