@@ -15,3 +15,9 @@
 争取一会就学会转换为table标签
 基本上就结束这次任务了
  ![image](https://github.com/inertiabeer/baidu-frontend/blob/master/%E4%BB%BB%E5%8A%A1%E5%9B%9B90%E8%BF%9B%E5%BA%A6.png)
+ ###任务四完成
+ 由于之前那个json2html的库很不好用，所以就换了一个库，在github上找到一个json2table的
+  ![image](https://github.com/inertiabeer/baidu-frontend/blob/master/%E4%BB%BB%E5%8A%A1%E5%9B%9B%E5%AE%8C%E6%88%901.png)
+  ![image](https://github.com/inertiabeer/baidu-frontend/blob/master/%E4%BB%BB%E5%8A%A1%E5%9B%9B%E5%AE%8C%E6%88%90.png)
+  
+  
