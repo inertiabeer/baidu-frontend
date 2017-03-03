@@ -4,41 +4,90 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='./jquery.js')
-    script(src='./json2html.js')
-    script(src='jquery.json2html.js')
+    script(src='http://localhost:3000/socket.io.js')
+   
+   
     script(src='jquery.columns.min.js')
     script(src='md5.js')
+    script(src='http://localhost:3000/socket.io/socket.io.js')
     script.
-      $(document).ready(
-      function()
-      {
-      $('button').click(function(){
-      $.post('http://localhost:3000/baidu',
-      {keyword:$('#keyword').val(),
-      phone:$('#phone').val()
-      },
-      function(data,status)
-      {
-      //- var tranform=
+      //- $(document).ready(
+      //- function()
       //- {
-      //- "<>":"li","html":'img ${img} info ${info} link ${link} title ${title}'
-      //- };
-      //- $('#container').json2html(data,tranform);
+      //- $('button').click(function(){
+      //- $.post('http://localhost:3000/baidu',
+      //- {keyword:$('#keyword').val(),
+      //- phone:$('#phone').val()
+      //- },
+      //- function(data,status)
+      //- {
 
-      $("#container").columns({data:data});
-      for(var i=0;i<data.length;i++)
-      {
-      if(data[i].img!=="")
-      {
-      let md5=hex_md5(data[i].img);
-      $('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+".png"+">");
-      }
-      }
+
+      //- $("#container").columns({data:data});
+      //- for(var i=0;i<data.length;i++)
+      //- {
+      //- if(data[i].img!=="")
+      //- {
+      //- let md5=hex_md5(data[i].img);
+      //- $('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+".png"+" >");
+      //- }
+      //- }
 
       
+      //- })
+      //- })
+      //- })
+      $(document).ready(
+      function()
+      {   
+      var socket=io.connect('http://localhost:3000');
+
+      $('button').click(function(){
+      var obj=document.getElementsByName('device');
+      var devices=[];
+      for(var i=0;i<obj.length;i++)
+      {
+      if(obj[i].checked)
+      devices.push(obj[i].value);
+
+      }
+
+      var keyList=[];
+      for(var j=1;j<=$("#pages").val();j++)
+      {
+      for(var h=0;h<devices.length;h++)
+      {var io_obj={
+      keyword:$("#keyword").val(),
+      page:j,
+      device:devices[h]
+      };
+      keyList.push(io_obj);
+
+      };
+
+      }
+     
+
+
+      socket.emit('client',keyList)
+      socket.on('server',function(content)
+      {
+      var o_content=JSON.parse(content);
+      $("#container").append("<div></div>");
+      $("#container").children("div:last-child").columns({data:o_content.dataList});
+      for(var i=0;i<o_content.dataList.length;i++)
+      {
+      if(o_content.dataList[i].img!=="")
+      {
+      let md5=hex_md5(o_content.dataList[i].img);
+      $('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+".png"+" >");
+      }
+      }
+
       })
       })
       })
+
 
 
 
