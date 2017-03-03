@@ -11,6 +11,7 @@ var o_device = JSON.parse(device);
 var time = Date.now();
 var keyword = system.args[1];
 var phone = system.args[2];
+var pages = (system.args[3] - 1) * 10;
 var width, useragent, height;
 
 for (var m_phone in o_device) {
@@ -28,34 +29,46 @@ for (var m_phone in o_device) {
 
 
 
-var url = "http://www.baidu.com/s?wd=" + encodeURIComponent(keyword);
 page.settings.userAgent = useragent || " ";
 
 page.viewportSize = {
 	width: width,
 	height: height
-}; //指定浏览器窗口的大小height必须指定
+};
+var dataList = [];
+var url;
+
+
+//for (var leaf = (pages - 1) * 10; pages > 0; pages = pages - 1) {
+url = "http://www.baidu.com/s?wd=" + keyword + "&pn=" + pages;
 page.open(url, function(s) {
+	console.log(s);
 
 
 	page.includeJs('jquery.js', function() {
-		var dataList = page.evaluate(
+		Array.prototype.push.apply(dataList, page.evaluate(
 
-			function() {
+			function(pages) {
+				var datas = [];
 
-				return $(".result").map(function() {
-					return ({
+				$(".result").map(function() {
+					datas.push({
 						title: $(this).find('.t>a').text(),
 						info: $(this).find(".c-abstract").text(),
 						link: $(this).find(".t>a").attr('href'),
 						img: $(this).find('.c-img').attr('src') || ''
 
 					})
-				}).toArray();
+				});
 
 
 
-			});
+				return datas;
+
+
+
+			}
+		));
 		var result = {
 			device: phone,
 			code: 1,
@@ -85,3 +98,5 @@ page.open(url, function(s) {
 
 
 });
+
+//}
