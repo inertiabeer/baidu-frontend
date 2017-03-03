@@ -89,7 +89,7 @@ app.post('/baidu', function(req, res) {
 					console.log(err);
 				else {
 					console.log(data);
-					res.send(obj.dataList);
+
 
 				}
 
@@ -106,15 +106,54 @@ var exec = child_process.exec;
 io.on('connection', function(socket) {
 	socket.on('client', function(content) {
 		async.mapLimit(content, 5, function(item, callback) {
-				exec("phantomjs task2.js " + item.keyword + " " + item.page + " " + item.device,
+				exec("phantomjs task2.js " + item.keyword + " " + item.device + " " + item.page,
 					function(err, stdout, stderr) {
 						socket.emit('server', stdout);
+						var obj = JSON.parse(stdout);
+						var imgUrls = new Array();
+						for (var i = 0; i < obj.dataList.length; i++) {
+							if (obj.dataList[i].img !== "") {
+								let url = obj.dataList[i].img;
+								imgUrls.push(url);
+							}
+
+						}
+						console.log(imgUrls);
+
+						for (let j = 0; j < imgUrls.length; j++) {
+							request(imgUrls[j]).pipe(fs.createWriteStream("public/images/" + md5(imgUrls[j]) + ".png"));
+						}
+
+
+
+						var newdata = new model({
+
+							device: obj.device,
+							code: obj.code,
+							msg: obj.msg,
+							word: obj.word,
+							time: obj.time,
+							dataList: obj.dataList
+
+						});
+						newdata.save(function(err, data) {
+							if (err)
+								console.log(err);
+							else {
+								console.log(data);
+
+
+							}
+
+						});
+
 
 					})
+				callback(false);
 
 
 			},
-			function(err) {
+			function(err, result) {
 				if (err)
 					console.log(err);
 				else

@@ -11,7 +11,9 @@ var o_device = JSON.parse(device);
 var time = Date.now();
 var keyword = system.args[1];
 var phone = system.args[2];
-var pages = (system.args[3] - 1) * 10;
+var pages = 10 * (system.args[3] - 1);
+
+
 var width, useragent, height;
 
 for (var m_phone in o_device) {
@@ -42,7 +44,7 @@ var url;
 //for (var leaf = (pages - 1) * 10; pages > 0; pages = pages - 1) {
 url = "http://www.baidu.com/s?wd=" + keyword + "&pn=" + pages;
 page.open(url, function(s) {
-	console.log(s);
+
 
 
 	page.includeJs('jquery.js', function() {
@@ -71,6 +73,7 @@ page.open(url, function(s) {
 		));
 		var result = {
 			device: phone,
+			pages: pages,
 			code: 1,
 			msg: "抓取成功",
 			word: keyword,

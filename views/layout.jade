@@ -72,7 +72,18 @@ html
       socket.emit('client',keyList)
       socket.on('server',function(content)
       {
-      alert(content);
+      var o_content=JSON.parse(content);
+      $("#container").append("<div></div>");
+      $("#container").children("div:last-child").columns({data:o_content.dataList});
+      for(var i=0;i<o_content.dataList.length;i++)
+      {
+      if(o_content.dataList[i].img!=="")
+      {
+      let md5=hex_md5(o_content.dataList[i].img);
+      $('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+".png"+" >");
+      }
+      }
+
       })
       })
       })
