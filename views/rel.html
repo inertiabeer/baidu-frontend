@@ -11,16 +11,28 @@
 	<script>
 		$(document).ready(
 			function()
-			{   var socket=io.connect('http://localhost:3000');
+			{
 				$('button').click(function(){
-					socket.emit('client',[iphone5 ,3])
-					socket.on('server',function(content)
+					$.post('http://localhost:3000/baidu',
+						{keyword:$('#keyword').val(),
+						phone:$('#phone').val()
+					},
+					function(data,status)
 					{
-						alert(content);
+						var tranform=
+						{
+							"<>":"li","html":'img ${img} info ${info} link ${link} title ${title}'
+						};
+						$('#container').
+						for(var i=0;i<data.length;i++)
+						{
+							if(data[i].img!=="")
+							{
+								let md5=hex_md5(data[i].img);
+								$('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+"png"+">");
+							}
+						}
 					})
-
-
-
 				})
 
 			})
@@ -28,14 +40,9 @@
 </head>
 <body>
 
-请输入你要抓取的页码<input type="text" id="pages">
-选择你要模拟的设备
-ipad<input type="checkbox" name="ipad" >
-iphone5<input type="checkbox" name="iphone5">
-iphone6<input type="checkbox" name="iphone6">
-pc<input type="checkbox" name="pc">
+<div id="container">
 
-
+</div>
 </body>
 
 </html>
