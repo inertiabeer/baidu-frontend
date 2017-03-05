@@ -42,7 +42,10 @@ var url;
 
 
 //for (var leaf = (pages - 1) * 10; pages > 0; pages = pages - 1) {
-url = "http://www.baidu.com/s?wd=" + keyword + "&pn=" + pages;
+if (phone == "pc")
+	url = "http://www.baidu.com/s?wd=" + keyword + "&pn=" + pages;
+else
+	url = "https://www.baidu.com/s?wd=" + keyword + "&pn=" + pages;
 page.open(url, function(s) {
 
 

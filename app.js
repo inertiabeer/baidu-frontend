@@ -44,71 +44,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.post('/baidu', function(req, res) {
-	console.log(req.body.keyword);
 
-	var child_process = require('child_process');
-	var exec = child_process.exec;
-
-	exec("phantomjs task2.js " + req.body.keyword + " " + req.body.phone + " " + req.body.pages,
-		function(err, stdout, stderr) {
-			if (err) {
-				console.log('child_process had some error' + err.code);
-				return;
-			}
-			console.log(stdout);
-			var obj = JSON.parse(stdout);
-			var imgUrls = new Array();
-			for (var i = 0; i < obj.dataList.length; i++) {
-				if (obj.dataList[i].img !== "") {
-					let url = obj.dataList[i].img;
-					imgUrls.push(url);
-				}
-
-			}
-			console.log(imgUrls);
-
-			for (let j = 0; j < imgUrls.length; j++) {
-				request(imgUrls[j]).pipe(fs.createWriteStream("public/images/" + md5(imgUrls[j]) + ".png"));
-			}
-
-
-
-			var newdata = new model({
-
-				device: obj.device,
-				code: obj.code,
-				msg: obj.msg,
-				word: obj.word,
-				time: obj.time,
-				dataList: obj.dataList
-
-			});
-			newdata.save(function(err, data) {
-				if (err)
-					console.log(err);
-				else {
-					console.log(data);
-
-
-				}
-
-			});
-
-
-
-		});
-
-
-
-})
 var exec = child_process.exec;
+var num = 0;
 io.on('connection', function(socket) {
 	socket.on('client', function(content) {
+		console.log(content);
 		async.mapLimit(content, 5, function(item, callback) {
 				exec("phantomjs task2.js " + item.keyword + " " + item.device + " " + item.page,
 					function(err, stdout, stderr) {
 						socket.emit('server', stdout);
+
+
 						var obj = JSON.parse(stdout);
 						var imgUrls = new Array();
 						for (var i = 0; i < obj.dataList.length; i++) {
@@ -118,7 +65,7 @@ io.on('connection', function(socket) {
 							}
 
 						}
-						console.log(imgUrls);
+
 
 						for (let j = 0; j < imgUrls.length; j++) {
 							request(imgUrls[j]).pipe(fs.createWriteStream("public/images/" + md5(imgUrls[j]) + ".png"));
@@ -136,11 +83,12 @@ io.on('connection', function(socket) {
 							dataList: obj.dataList
 
 						});
+
 						newdata.save(function(err, data) {
 							if (err)
 								console.log(err);
 							else {
-								console.log(data);
+								//console.log(data);
 
 
 							}
@@ -152,12 +100,16 @@ io.on('connection', function(socket) {
 				callback(false);
 
 
+
 			},
 			function(err, result) {
 				if (err)
 					console.log(err);
-				else
-					console.log('爬取完成');
+				else {
+
+					console.log("正在爬取");
+
+				}
 			})
 
 

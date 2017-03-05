@@ -53,6 +53,7 @@ html
       }
 
       var keyList=[];
+      var num=0;
       for(var j=1;j<=$("#pages").val();j++)
       {
       for(var h=0;h<devices.length;h++)
@@ -72,6 +73,8 @@ html
       socket.emit('client',keyList)
       socket.on('server',function(content)
       {
+      num++;
+      $("#h1").html(num+"/"+keyList.length);
       var o_content=JSON.parse(content);
       $("#container").append("<div></div>");
       $("#container").children("div:last-child").columns({data:o_content.dataList});
