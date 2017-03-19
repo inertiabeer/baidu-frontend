@@ -50,67 +50,120 @@ var num = 0;
 io.on('connection', function(socket) {
 	socket.on('client', function(content) {
 		console.log(content);
-		async.mapLimit(content, 5, function(item, callback) {
-				exec("phantomjs task2.js " + item.keyword + " " + item.device + " " + item.page,
-					function(err, stdout, stderr) {
-						socket.emit('server', stdout);
+		var queue = async.queue(function(item, callback) {
+			exec("phantomjs task2.js " + item.keyword + " " + item.device + " " + item.page,
+				function(err, stdout, stderr) {
+					socket.emit('server', stdout);
 
 
-						var obj = JSON.parse(stdout);
-						var imgUrls = new Array();
-						for (var i = 0; i < obj.dataList.length; i++) {
-							if (obj.dataList[i].img !== "") {
-								let url = obj.dataList[i].img;
-								imgUrls.push(url);
-							}
+					var obj = JSON.parse(stdout);
+					var imgUrls = new Array();
+					for (var i = 0; i < obj.dataList.length; i++) {
+						if (obj.dataList[i].img !== "") {
+							let url = obj.dataList[i].img;
+							imgUrls.push(url);
+						}
+
+					}
+
+
+					// for (let j = 0; j < imgUrls.length; j++) {
+					// 	request(imgUrls[j]).pipe(fs.createWriteStream("public/images/" + md5(imgUrls[j]) + ".png"));
+					// }//将读取图片的暂时屏蔽
+
+
+
+					var newdata = new model({
+
+						device: obj.device,
+						code: obj.code,
+						msg: obj.msg,
+						word: obj.word,
+						time: obj.time,
+						dataList: obj.dataList
+
+					});
+
+					newdata.save(function(err, data) {
+						if (err)
+							console.log(err);
+						else {
+							//console.log(data);
+
 
 						}
 
-
-						for (let j = 0; j < imgUrls.length; j++) {
-							request(imgUrls[j]).pipe(fs.createWriteStream("public/images/" + md5(imgUrls[j]) + ".png"));
-						}
+					});
 
 
+				})
 
-						var newdata = new model({
-
-							device: obj.device,
-							code: obj.code,
-							msg: obj.msg,
-							word: obj.word,
-							time: obj.time,
-							dataList: obj.dataList
-
-						});
-
-						newdata.save(function(err, data) {
-							if (err)
-								console.log(err);
-							else {
-								//console.log(data);
-
-
-							}
-
-						});
-
-
-					})
-				callback(false);
-
-
-
-			},
-			function(err, result) {
-				if (err)
-					console.log(err);
-				else {
-
-					console.log("正在爬取");
-
-				}
+			callback();
+		}, 5);
+		queue.push(content, function(err) {
+				console.log("完成");
 			})
+			// async.mapLimit(content, 5, function(item, callback) {
+			// 		exec("phantomjs task2.js " + item.keyword + " " + item.device + " " + item.page,
+			// 			function(err, stdout, stderr) {
+			// 				socket.emit('server', stdout);
+
+
+		// 				var obj = JSON.parse(stdout);
+		// 				var imgUrls = new Array();
+		// 				for (var i = 0; i < obj.dataList.length; i++) {
+		// 					if (obj.dataList[i].img !== "") {
+		// 						let url = obj.dataList[i].img;
+		// 						imgUrls.push(url);
+		// 					}
+
+		// 				}
+
+
+		// 				for (let j = 0; j < imgUrls.length; j++) {
+		// 					request(imgUrls[j]).pipe(fs.createWriteStream("public/images/" + md5(imgUrls[j]) + ".png"));
+		// 				}
+
+
+
+		// 				var newdata = new model({
+
+		// 					device: obj.device,
+		// 					code: obj.code,
+		// 					msg: obj.msg,
+		// 					word: obj.word,
+		// 					time: obj.time,
+		// 					dataList: obj.dataList
+
+		// 				});
+
+		// 				newdata.save(function(err, data) {
+		// 					if (err)
+		// 						console.log(err);
+		// 					else {
+		// 						//console.log(data);
+
+
+		// 					}
+
+		// 				});
+
+
+		// 			})
+		// 		callback(false);
+
+
+
+		// 	},
+		// 	function(err, result) {
+		// 		if (err)
+		// 			console.log(err);
+		// 		else {
+
+		// 			console.log("正在爬取");
+
+		// 		}
+		// 	})
 
 
 	})

@@ -82,8 +82,8 @@ html
       {
       if(o_content.dataList[i].img!=="")
       {
-      let md5=hex_md5(o_content.dataList[i].img);
-      $('#imgs').append("<img src="+"http://localhost:3000/public/images/"+md5+".png"+" >");
+      //- let md5=hex_md5(o_content.dataList[i].img);
+      $('#imgs').append("<img src="+o_content.dataList[i].img+" >");
       }
       }
 

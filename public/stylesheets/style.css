@@ -16,3 +16,8 @@ td {
 	width: 150px;
 	overflow: hidden;
 }
+img
+{
+	max-width: 40px;
+	max-height: 40px;
+}
